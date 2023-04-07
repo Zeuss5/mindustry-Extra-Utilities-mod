@@ -126,54 +126,6 @@ public class ExtraUtilitiesMod extends Mod{
     }
 
     @Override
-    public void init() {
-        EUCall.registerPackets();
-        EUOverride.overrideBuilder();
-
-        //EUOverride.ap4sOverride();
-
-        settings.defaults("eu-hard-mode", false);
-
-        if(hardMod){
-            EUOverride.overrideBlockAll();
-            Mods.LoadedMod mod = Vars.mods.locateMod(ModName);
-            mod.meta.displayName = mod.meta.displayName + " Hard!";
-            mod.meta.version = Vars.mods.locateMod(ModName).meta.version + "-hard";
-        }
-
-        if(Vars.ui.settings != null) {
-            BaseDialog dialog = new BaseDialog("tips");
-            Runnable exit = () -> {
-                dialog.hide();
-                Core.app.exit();
-            };
-            dialog.cont.add(toText("eu-reset-exit"));
-            dialog.buttons.button("OK", exit).center().size(150, 50);
-
-            Vars.ui.settings.addCategory(toText("EU-SET"), name("fireWork"), settingsTable -> {
-                settingsTable.checkPref("eu-first-load", true);
-                settingsTable.pref(new SettingsMenuDialog.SettingsTable.CheckSetting("eu-hard-mode", false, null){
-                    @Override
-                    public void add(SettingsMenuDialog.SettingsTable table) {
-                        CheckBox box = new CheckBox(title);
-
-                        box.update(() -> box.setChecked(settings.getBool(name)));
-
-                        box.changed(() -> {
-                            settings.put(name, box.isChecked());
-                            settings.put("eu-open-hard", hardMod);
-                            dialog.show();
-                        });
-                        box.left();
-                        addDesc(table.add(box).left().padTop(3f).get());
-                        table.row();
-                    }
-                });
-            });
-        }
-    }
-
-    @Override
     public void loadContent(){
         EUUnitTypes.load();
         EUOverride.overrideUnit1();
